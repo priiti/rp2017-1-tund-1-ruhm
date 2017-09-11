@@ -1,7 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
+const databaseConnection = require('./database/database')
 require('dotenv').config()
 const topics = require('./routes/topics')
 
@@ -24,17 +24,17 @@ app.use((error, req, res, next) => {
   })
 })
 
-mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true}, (err) => {
-  if (err) {
-    console.log(`Error when connecting to database ⚠️`)
-  }
-  console.log('Connected database')
-})
-
-const listener = app.listen(process.env.APP_PORT || 3000, () =>
-  console.log('App started in ' +
-    process.env.NODE_ENV +
-    ' on port ' +
-    listener.address().port
-  )
-)
+databaseConnection.createDatabaseConnection()
+  .then((dbConnected) => {
+    if (dbConnected) console.log('Database connected! 💁')
+    const listener = app.listen(process.env.APP_PORT || 3000, () =>
+      console.log('App started in ' +
+        process.env.NODE_ENV +
+        ' on port ' +
+        listener.address().port
+      )
+    )
+  })
+  .catch((error) => {
+    console.log(error)
+  })
