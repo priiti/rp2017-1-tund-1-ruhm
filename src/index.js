@@ -26,9 +26,9 @@ app.use((error, req, res, next) => {
 
 mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true}, (err) => {
   if (err) {
-    console.log(err)
+    console.log(`Error when connecting to database ⚠️`)
   }
-  console.log('Connected databases')
+  console.log('Connected database')
 })
 
 const listener = app.listen(process.env.APP_PORT || 3000, () =>
