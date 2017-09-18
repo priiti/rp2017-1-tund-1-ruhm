@@ -1,15 +1,16 @@
+require('dotenv').config({ path: '.env' })
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-const databaseConnection = require('./database/database')
-require('dotenv').config()
-const topics = require('./routes/topics')
+const mongoose = require('mongoose')
 
 const app = express()
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
+const topics = require('./routes/topics')
 app.use('/api/topics', topics)
 
 app.use((req, res, next) => {
@@ -24,17 +25,13 @@ app.use((error, req, res, next) => {
   })
 })
 
-databaseConnection.createDatabaseConnection()
-  .then((dbConnected) => {
-    if (dbConnected) console.log('Database connected! 💁')
-    const listener = app.listen(process.env.APP_PORT || 3000, () =>
-      console.log('App started in ' +
-        process.env.NODE_ENV +
-        ' on port ' +
-        listener.address().port
-      )
+mongoose.Promise = global.Promise
+mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
+  .then(() => {
+    const listener = app.listen(process.env.APP_PORT || 3005, () =>
+      console.log(`App started in ${process.env.NODE_ENV} on port ${listener.address().port}`)
     )
   })
   .catch((error) => {
-    console.log(error)
+    console.error(error)
   })

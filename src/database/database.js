@@ -1,16 +1,13 @@
 const mongoose = require('mongoose')
 
-module.exports = {
-  createDatabaseConnection () {
+mongoose.Promise = global.Promise
+exports.createDatabaseConnection = () => {
+  mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true }, (error, db) => {
     return new Promise((resolve, reject) => {
-      mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true }, (error, db) => {
-        if (error) {
-          reject(new Error('Error while connecting to database ⚠️\n', error))
-        }
-        if (db) {
-          resolve(true)
-        }
-      })
+      if (error) {
+        reject(error)
+      }
+      resolve(db)
     })
-  }
+  })
 }

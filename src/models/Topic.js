@@ -9,6 +9,9 @@ const TopicSchema = new Schema({
   viewCount: {
     type: Number,
     default: 0
+  },
+  deleted: {
+    type: Date
   }
 },
   {
