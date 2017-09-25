@@ -32,8 +32,11 @@ app.use((error, req, res, next) => {
 if (!testEnvironment) {
   mongoose.set('debug', true)
 }
+
 mongoose.Promise = global.Promise
-mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
+const mongoDbUri = testEnvironment ? process.env.MONGODB_TEST_URI : process.env.MONGODB_URI
+
+mongoose.connect(mongoDbUri, { useMongoClient: true })
   .then(() => {
     if (testEnvironment) return
     const listener = app.listen(process.env.APP_PORT || 3005, () =>

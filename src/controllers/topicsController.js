@@ -3,9 +3,7 @@ const { ObjectId } = require('mongodb')
 
 exports.getAllTopics = async (req, res) => {
   const topics = await Topic.find({})
-  res.json({
-    topics
-  })
+  return res.json({ topics })
 }
 
 exports.getTopicById = async (req, res) => {
@@ -17,9 +15,7 @@ exports.getTopicById = async (req, res) => {
   if (!topic) {
     throw new Error()
   }
-  res.json({
-    topic
-  })
+  return res.json({ topic })
 }
 
 // db.topics.find({"name": /^topic name$/i}).pretty()
@@ -29,10 +25,10 @@ exports.addNewTopic = async (req, res) => {
   const newTopic = new Topic({
     name: name
   })
-  const savedTopic = await newTopic.save()
-  if (savedTopic) {
+  const topic = await newTopic.save()
+  if (topic) {
     res.status(201).json({
-      savedTopic
+      topic
     })
   }
 }
@@ -62,9 +58,9 @@ exports.deleteTopicById = async (req, res) => {
   if (!ObjectId.isValid(id)) {
     return res.status(404).send()
   }
-  const topic = await Topic.findByIdAndUpdate(id, { deleted: new Date() })
+  const topic = await Topic.findByIdAndUpdate(id, { deleted: new Date() }, { new: true })
   if (!topic) {
     return res.status(404).send()
   }
-  res.status(200).send(topic)
+  return res.json({ topic })
 }
