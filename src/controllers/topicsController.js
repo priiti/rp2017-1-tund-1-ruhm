@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb')
 
 exports.getAllTopics = async (req, res) => {
   const topics = await Topic.find({})
+    .populate('curriculum', 'curriculum manager -_id')
   return res.json({ topics })
 }
 
@@ -11,7 +12,8 @@ exports.getTopicById = async (req, res) => {
   if (!ObjectId.isValid(topicId)) {
     return res.status(404).send()
   }
-  const topic = await Topic.findById({ _id: topicId })
+  const topic = await Topic.findOne({ _id: topicId })
+    .populate('curriculum', 'curriculum manager -_id')
   if (!topic) {
     throw new Error()
   }
@@ -21,9 +23,10 @@ exports.getTopicById = async (req, res) => {
 // db.topics.find({"name": /^topic name$/i}).pretty()
 
 exports.addNewTopic = async (req, res) => {
-  const { name } = req.body
+  const { name, curriculum } = req.body
   const newTopic = new Topic({
-    name: name
+    name,
+    curriculum
   })
   const topic = await newTopic.save()
   if (topic) {

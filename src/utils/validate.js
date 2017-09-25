@@ -15,7 +15,9 @@ exports.topic = [
 ]
 
 exports.curriculum = [
-  body(['curriculum', 'manager']).exists().withMessage('Curriculum must exist.'),
-  // .isLength({ min: 4 }).withMessage('Name must be at least 4 characters long.'),
+  body('curriculum').exists().withMessage('Curriculum name must exist.')
+  .isLength({ min: 4 }).withMessage('Curriculum name must be at least 4 characters long.'),
+  body('manager').exists().withMessage('Manager name must exist')
+  .isLength({ min: 4 }).withMessage('Manager name must be at least 4 characters long.'),
   validationCheck
 ]

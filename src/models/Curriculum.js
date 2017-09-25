@@ -10,6 +10,9 @@ const CurriculumSchema = new Schema({
   manager: {
     type: String,
     required: true
+  },
+  deleted: {
+    type: Date
   }
 },
   {

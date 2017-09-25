@@ -13,6 +13,6 @@ exports.addNewCurriculum = async (req, res) => {
   })
   const savedCurriculum = await newCurriculum.save()
   if (savedCurriculum) {
-    return res.json({ savedCurriculum })
+    return res.status(201).send({ savedCurriculum })
   }
 }
