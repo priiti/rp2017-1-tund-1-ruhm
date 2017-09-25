@@ -4,9 +4,13 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
+const testEnvironment = process.env.NODE_ENV === 'test'
+
 const app = express()
 
-app.use(morgan('dev'))
+if (!testEnvironment) {
+  app.use(morgan('dev'))
+}
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -25,13 +29,20 @@ app.use((error, req, res, next) => {
   })
 })
 
+if (!testEnvironment) {
+  mongoose.set('debug', true)
+}
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
   .then(() => {
+    if (testEnvironment) return
     const listener = app.listen(process.env.APP_PORT || 3005, () =>
       console.log(`App started in ${process.env.NODE_ENV} on port ${listener.address().port}`)
     )
   })
   .catch((error) => {
     console.error(error)
+    process.exit(1)
   })
+
+module.exports = app
