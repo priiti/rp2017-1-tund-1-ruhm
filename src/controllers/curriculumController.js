@@ -5,14 +5,18 @@ exports.getAllCurriculums = async (req, res) => {
   return res.json({ curriculums })
 }
 
-exports.addNewCurriculum = async (req, res) => {
+exports.addNewCurriculum = async (req, res, next) => {
   const { curriculum, manager } = req.body
   const newCurriculum = new Curriculum({
     curriculum,
     manager
   })
   const savedCurriculum = await newCurriculum.save()
-  if (savedCurriculum) {
-    return res.status(201).send({ savedCurriculum })
-  }
+    .catch(err => {
+      if (err.code === 11000) {
+        return res.status(422).json({ errors: [{ msg: 'Duplicate key' }] })
+      }
+      next(err)
+    })
+  return res.status(201).send({ savedCurriculum })
 }
