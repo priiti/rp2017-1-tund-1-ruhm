@@ -8,5 +8,5 @@ describe('/api', () => {
   before(async () => {
     await Topic.remove({})
   })
-  describe('./topics/topics.js', () => require('./routes/topics.test')(supertest))
+  describe('/topics/topics.js', () => require('./routes/topics.test')(supertest))
 })

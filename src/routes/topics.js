@@ -3,6 +3,7 @@ const topicsController = require('./../controllers/topicsController')
 const { asyncMiddleware } = require('./../utils/common')
 const validate = require('./../utils/validate')
 
+// Topics
 router.get('/', asyncMiddleware(topicsController.getAllTopics))
 router.get('/:id', asyncMiddleware(topicsController.getTopicById))
 router.post('/',

@@ -27,7 +27,6 @@ module.exports = (supertest) => {
       const topic = {
         name: 'taa'
       }
-
       supertest
         .post('/api/topics')
         .send(topic)
@@ -133,6 +132,13 @@ module.exports = (supertest) => {
           expect(topic).to.have.property('deleted')
           done()
         })
+    })
+
+    it('should not delete topic with invalid id', (done) => {
+      supertest
+        .delete(`/api/topics/12345`)
+        .set('Accept', 'application/json')
+        .expect(404, done)
     })
   })
 }

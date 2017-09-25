@@ -10,6 +10,10 @@ const TopicSchema = new Schema({
     type: Number,
     default: 0
   },
+  curriculum: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Curriculum'
+  },
   deleted: {
     type: Date
   }

@@ -15,7 +15,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const topics = require('./routes/topics')
+const curriculums = require('./routes/curriculums')
 app.use('/api/topics', topics)
+app.use('/api/curriculums', curriculums)
 
 app.use((req, res, next) => {
   const error = new Error('Page not found')
