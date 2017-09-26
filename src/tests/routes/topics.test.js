@@ -3,7 +3,7 @@ const expect = require('chai').expect
 const Topic = require('./../../models/Topic')
 
 module.exports = (supertest) => {
-  let savedTopic;
+  let savedTopic = null
   describe('/POST topics', () => {
     it('should create new topic', (done) => {
       const topic = {

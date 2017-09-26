@@ -23,14 +23,4 @@ const TopicSchema = new Schema({
   }
 )
 
-// const populateCurriculum = function (next) {
-//   this.populate({
-//     path: 'curriculum'
-//   })
-//   next()
-// }
-
-// TopicSchema.pre('find', populateCurriculum)
-// TopicSchema.pre('findOne', populateCurriculum)
-
 module.exports = mongoose.model('Topic', TopicSchema)

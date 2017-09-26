@@ -6,14 +6,17 @@ const Curriculum = require('./../models/Curriculum')
 // const expect = require('expect')
 
 const testCurriculum = [{
-  curriculum: 'Informaatika',
-  manager: 'Romil'
+  curriculum: 'Informatics',
+  manager: 'Random Manager'
 }]
 
 describe('/api', () => {
   before(async () => {
     await Topic.remove({})
     await Curriculum.remove({})
+    const testableCurriculum = new Curriculum(testCurriculum[0])
+    await testableCurriculum.save()
   })
   describe('/topics/topics.js', () => require('./routes/topics.test')(supertest))
+  describe('/curriculums/curriculums.js', () => require('./routes/curriculums.test')(supertest))
 })
