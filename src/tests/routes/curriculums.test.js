@@ -67,4 +67,19 @@ module.exports = (supertest) => {
         })
     })
   })
+  describe('DELETE /curriculums', () => {
+    it('should delete curriculum from database', (done) => {
+      supertest
+        .delete(`/api/curriculums/${savedCurriculumDatabase._id}`)
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err)
+          const { curriculum } = res.body
+          expect(curriculum).to.be.an('object')
+          expect(curriculum).to.have.property('deleted')
+          done()
+        })
+    })
+  })
 }
